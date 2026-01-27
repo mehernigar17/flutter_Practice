@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -10,11 +11,34 @@ class DarkMood extends StatefulWidget {
 
 class _DarkMoodState extends State<DarkMood> {
   bool isSelected = false;
+  Widget categoryCard({
+    required IconData icon,
+    required String title,
+
+    required String subtitle,
+
+
+  }){return Container(
+    padding: const EdgeInsets.all(16),
+    decoration: BoxDecoration(
+        color: Colors.green[900],
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 12,
+            offset: const Offset(0,6),
+          )
+        ]
+    ),
+
+  );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-     backgroundColor: isSelected?Colors.black:Colors.white,
+      backgroundColor: isSelected?Colors.black:Colors.white,
       appBar: AppBar(
 
         backgroundColor: isSelected ? Colors.black : Colors.white,
@@ -27,23 +51,23 @@ class _DarkMoodState extends State<DarkMood> {
             },
             child: Padding(padding:
             const EdgeInsetsGeometry.all(16),
-            child:Image.asset('assets/image/nightmode.png'
-            , width: 30,
-            height: 30,
-         ),
+              child:Image.asset('assets/image/nightmode.png'
+                , width: 30,
+                height: 30,
+              ),
 
             ),
 
 
-            
+
           )
         ],
       ),
 
 
-        body: Align(
-          alignment: Alignment.topCenter,
-          child:Padding(padding:const EdgeInsets.only(top: 22),
+      body: Align(
+        alignment: Alignment.topCenter,
+        child:Padding(padding:const EdgeInsets.only(top: 22),
 
 
 
@@ -58,7 +82,7 @@ class _DarkMoodState extends State<DarkMood> {
             ),
           ),
         ),
-    ),
+      ),
     );
   }
 }
