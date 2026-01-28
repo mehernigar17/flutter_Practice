@@ -21,7 +21,7 @@ class _DarkMoodState extends State<DarkMood> {
   }){return Container(
     padding: const EdgeInsets.all(16),
     decoration: BoxDecoration(
-        color: Colors.green[900],
+        color: isSelected?Colors.grey[900]:Colors.white,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
@@ -30,6 +30,36 @@ class _DarkMoodState extends State<DarkMood> {
             offset: const Offset(0,6),
           )
         ]
+    ),
+    child: Column(
+
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: Colors.green,
+            borderRadius: BorderRadius.circular(14)
+          ),
+        ),
+        const SizedBox(height: 12),
+        Text(
+          title,
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: isSelected ? Colors.white : Colors.black,
+          ),
+
+
+        ),
+        const SizedBox(height: 6),
+        Text(
+          subtitle
+        )
+
+      ],
     ),
 
   );
