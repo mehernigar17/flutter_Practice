@@ -15,76 +15,86 @@ class _DarkMoodState extends State<DarkMood> {
     required IconData icon,
     required String title,
     required String subtitle,
+    required double cardWidth,
   }) {
-    return Container(
-      width: MediaQuery.of(context).size.width / 2 - 24,
-      height: 210,
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: isSelected ? Colors.grey[900] : Colors.white,
-        borderRadius: BorderRadius.circular(22),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.08),
-            blurRadius: 16,
-            offset: const Offset(0, 8),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        //mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: Colors.green,
-              borderRadius: BorderRadius.circular(14),
+    return SizedBox(
+      width: cardWidth,
+      child: Container(
+        height: 210,
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: isSelected ? Colors.grey[900] : Colors.white,
+          borderRadius: BorderRadius.circular(22),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.08),
+              blurRadius: 16,
+              offset: const Offset(0, 8),
             ),
-            child: Icon(icon, color: Colors.white, size: 26),
-          ),
-          const SizedBox(height: 12),
-          Text(
-            title,
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: isSelected ? Colors.white : Colors.black,
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Colors.green,
+                borderRadius: BorderRadius.circular(14),
+              ),
+              child: Icon(icon, color: Colors.white, size: 26),
             ),
-          ),
-          const SizedBox(height: 6),
-          Text(
-            subtitle,
-            maxLines: 3,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              fontSize: 13,
-              color: Colors.grey[600],
+            const SizedBox(height: 12),
+            Text(
+              title,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: isSelected ? Colors.white : Colors.black,
+              ),
             ),
-          ),
-          //const SizedBox(height: 10),
-
-          Align(
-            alignment: Alignment.bottomRight,
-            child: Icon(
-              Icons.arrow_forward,
-              size: 18,
-              color: Colors.green,
+            const SizedBox(height: 6),
+            Text(
+              subtitle,
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontSize: 13,
+                color: Colors.grey[600],
+              ),
             ),
-          ),
-        ],
+            const Spacer(),
+            Align(
+              alignment: Alignment.bottomRight,
+              child: Icon(
+                Icons.arrow_forward,
+                size: 18,
+                color: Colors.green,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+
+    // Decide card width based on screen size
+    double spacing = 16;
+    double cardWidth;
+    if (screenWidth < 400) {
+      cardWidth = screenWidth - 32;
+    } else {
+      cardWidth = screenWidth / 2 - 24;
+    }
+
     return Scaffold(
-      backgroundColor:
-      isSelected ? Colors.black : const Color(0xffeefaf6),
+      backgroundColor: isSelected ? Colors.black : const Color(0xffeefaf6),
       appBar: AppBar(
-        backgroundColor:
-        isSelected ? Colors.black : const Color(0xffeefaf6),
+        backgroundColor: isSelected ? Colors.black : const Color(0xffeefaf6),
         elevation: 0,
         actions: [
           GestureDetector(
@@ -110,6 +120,7 @@ class _DarkMoodState extends State<DarkMood> {
             padding: const EdgeInsets.all(16),
             child: Column(
               children: [
+                const SizedBox(height: 20),
                 Text(
                   "Select Your Categoryy",
                   style: GoogleFonts.bungee(
@@ -129,33 +140,33 @@ class _DarkMoodState extends State<DarkMood> {
                 ),
                 const SizedBox(height: 28),
 
-                /// 👇 WRAP ONLY (no wrapper)
                 Wrap(
-                  spacing: 16,
-                  runSpacing: 16,
+                  spacing: spacing,
+                  runSpacing: spacing,
                   children: [
                     categoryCard(
                       icon: Icons.description,
                       title: "Birth Certificate",
-                      subtitle:
-                      "Apply for birth registration certificate",
+                      subtitle: "Apply for birth registration certificate",
+                      cardWidth: cardWidth,
                     ),
                     categoryCard(
                       icon: Icons.credit_card,
                       title: "National ID Card",
                       subtitle: "NID application and services",
+                      cardWidth: cardWidth,
                     ),
                     categoryCard(
                       icon: Icons.flight,
                       title: "Passport",
-                      subtitle:
-                      "Passport application & renewal",
+                      subtitle: "Passport application & renewal",
+                      cardWidth: cardWidth,
                     ),
                     categoryCard(
                       icon: Icons.school,
                       title: "HSC / SSC Certificate",
-                      subtitle:
-                      "Educational certificate verification",
+                      subtitle: "Educational certificate verification",
+                      cardWidth: cardWidth,
                     ),
                   ],
                 ),
