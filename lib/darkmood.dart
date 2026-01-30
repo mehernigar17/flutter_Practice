@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -39,8 +38,8 @@ class _DarkMoodState extends State<DarkMood> {
         Container(
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            color: Colors.green,
-            borderRadius: BorderRadius.circular(14)
+              color: Colors.green,
+              borderRadius: BorderRadius.circular(14)
           ),
         ),
         const SizedBox(height: 12),
@@ -56,8 +55,24 @@ class _DarkMoodState extends State<DarkMood> {
         ),
         const SizedBox(height: 6),
         Text(
-          subtitle
+          subtitle,
+          maxLines: 3,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(
+              fontSize: 13,
+              color: Colors.grey[600]
+          ),
+        ),
+        const SizedBox(height: 10),
+        Align(
+          alignment: Alignment.bottomRight,
+          child: Icon(
+            Icons.arrow_forward,
+            color: Colors.green,
+            size: 18,
+          ),
         )
+
 
       ],
     ),
@@ -68,10 +83,10 @@ class _DarkMoodState extends State<DarkMood> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: isSelected?Colors.black:Colors.white,
+      backgroundColor: isSelected?Colors.black:const  Color(0xffeefaf6),
       appBar: AppBar(
 
-        backgroundColor: isSelected ? Colors.black : Colors.white,
+        backgroundColor: isSelected ? Colors.black :const  Color(0xffeefaf6),
         actions: [
           GestureDetector(
             onTap: (){
@@ -95,24 +110,13 @@ class _DarkMoodState extends State<DarkMood> {
       ),
 
 
-      body: Align(
-        alignment: Alignment.topCenter,
-        child:Padding(padding:const EdgeInsets.only(top: 22),
+      body: SafeArea(child:SingleChildScrollView(
 
 
 
-          child: Text("SELECT YOUR CATEGORY",
-            style: GoogleFonts.bungee(
+      )),
 
-              fontSize: 24,
-              fontWeight: FontWeight.w900,
-              color:Colors.green[900],
+      );
 
-
-            ),
-          ),
-        ),
-      ),
-    );
   }
 }
