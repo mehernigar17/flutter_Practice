@@ -17,16 +17,17 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final appState = Provider.of<AppState>(context);
-
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        brightness: appState.isDarkMode ? Brightness.dark : Brightness.light,
-        primarySwatch: Colors.green,
-      ),
-      home: const DarkMood(),
+    return Consumer<AppState>(
+      builder: (context, appState, child) {
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            brightness: appState.isDarkMode ? Brightness.dark : Brightness.light,
+            primarySwatch: Colors.green,
+          ),
+          home: const DarkMood(),
+        );
+      },
     );
   }
 }
-
