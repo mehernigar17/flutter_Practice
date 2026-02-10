@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-
-
+import 'package:provider/provider.dart';
+import 'appstate.dart';
 import 'darkmood.dart';
+
 void main() {
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => AppState(),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -12,10 +17,16 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: const DarkMood(),
+    final appState = Provider.of<AppState>(context);
 
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        brightness: appState.isDarkMode ? Brightness.dark : Brightness.light,
+        primarySwatch: Colors.green,
+      ),
+      home: const DarkMood(),
     );
   }
 }
+

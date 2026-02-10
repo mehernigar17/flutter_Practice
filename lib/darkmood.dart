@@ -1,21 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'appstate.dart'; // Ensure you have AppState provider ready
 
-class DarkMood extends StatefulWidget {
+class DarkMood extends StatelessWidget {
   const DarkMood({super.key});
 
-  @override
-  State<DarkMood> createState() => _DarkMoodState();
-}
-
-class _DarkMoodState extends State<DarkMood> {
-  bool isSelected = false;
 
   Widget categoryCard({
     required IconData icon,
     required String title,
     required String subtitle,
     required double cardWidth,
+    required bool isDarkMode,
   }) {
     return SizedBox(
       width: cardWidth,
@@ -23,7 +20,7 @@ class _DarkMoodState extends State<DarkMood> {
         height: 210,
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: isSelected ? Colors.grey[900] : Colors.white,
+          color: isDarkMode ? Colors.grey[900] : Colors.lightGreen[900],
           borderRadius: BorderRadius.circular(22),
           boxShadow: [
             BoxShadow(
@@ -47,29 +44,18 @@ class _DarkMoodState extends State<DarkMood> {
             const SizedBox(height: 12),
             Text(
               title,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
-                color: isSelected ? Colors.white : Colors.black,
+                color: Colors.white,
               ),
             ),
             const SizedBox(height: 6),
             Text(
               subtitle,
-              maxLines: 3,
-              overflow: TextOverflow.ellipsis,
               style: TextStyle(
                 fontSize: 13,
-                color: Colors.grey[600],
-              ),
-            ),
-            const Spacer(),
-            Align(
-              alignment: Alignment.bottomRight,
-              child: Icon(
-                Icons.arrow_forward,
-                size: 18,
-                color: Colors.green,
+                color: Colors.grey[300],
               ),
             ),
           ],
@@ -78,41 +64,93 @@ class _DarkMoodState extends State<DarkMood> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
 
-    // Decide card width based on screen size
-    double spacing = 16;
-    double cardWidth;
-    if (screenWidth < 400) {
-      cardWidth = screenWidth - 32;
-    } else {
-      cardWidth = screenWidth / 2 - 24;
-    }
-
-    return Scaffold(
-      backgroundColor: isSelected ? Colors.black : const Color(0xffeefaf6),
-      appBar: AppBar(
-        backgroundColor: isSelected ? Colors.black : const Color(0xffeefaf6),
-        elevation: 0,
-        actions: [
-          GestureDetector(
-            onTap: () {
-              setState(() {
-                isSelected = !isSelected;
-              });
+  Drawer appDrawer(BuildContext context, AppState appState) {
+    return Drawer(
+      backgroundColor: Colors.white,
+      child: Column(
+        children: [
+          const SizedBox(height: 60),
+          drawerItem(
+            Icons.bar_chart,
+            appState.isBangla ? "প্রগেস" : "Progress",
+                () {},
+          ),
+          drawerItem(
+            Icons.report_problem,
+            appState.isBangla ? "অভিযোগ" : "Complain",
+                () {},
+          ),
+          const Divider(),
+          drawerItem(
+            Icons.settings,
+            appState.isBangla ? "সেটিংস" : "Settings",
+                () {
+              Navigator.pop(context);
+              openSettings(context, appState);
             },
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Image.asset(
-                'assets/image/nightmode.png',
-                width: 30,
-                height: 30,
-              ),
-            ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget drawerItem(IconData icon, String title, VoidCallback onTap) {
+    return ListTile(
+      leading: Icon(icon, color: Colors.green),
+      title: Text(title, style: const TextStyle(fontSize: 16)),
+      onTap: onTap,
+    );
+  }
+
+
+  void openSettings(BuildContext context, AppState appState) {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (_) {
+        return Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SwitchListTile(
+                title: Text(appState.isBangla ? "ডার্ক মোড" : "Dark Mode"),
+                value: appState.isDarkMode,
+                onChanged: appState.setDarkMode,
+              ),
+              SwitchListTile(
+                title: const Text("বাংলা / English"),
+                value: appState.isBangla,
+                onChanged: appState.setLanguage,
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
+    final appState = Provider.of<AppState>(context);
+    double screenWidth = MediaQuery.of(context).size.width;
+    double spacing = 16;
+    double cardWidth =
+    screenWidth < 400 ? screenWidth - 32 : screenWidth / 2 - 24;
+
+    return Scaffold(
+      drawer: appDrawer(context, appState),
+      backgroundColor: appState.isDarkMode ? Colors.black : const Color(0xffeefaf6),
+      appBar: AppBar(
+        backgroundColor: appState.isDarkMode ? Colors.black : const Color(0xffeefaf6),
+        elevation: 0,
+        iconTheme: IconThemeData(
+          color: appState.isDarkMode ? Colors.white : Colors.black,
+        ),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -122,51 +160,49 @@ class _DarkMoodState extends State<DarkMood> {
               children: [
                 const SizedBox(height: 20),
                 Text(
-                  "Select Your Categoryy",
+                  appState.isBangla
+                      ? "আপনার ক্যাটাগরি নির্বাচন করুন"
+                      : "Select Your Category",
                   style: GoogleFonts.bungee(
                     fontSize: 24,
                     fontWeight: FontWeight.w900,
                     color: Colors.green[900],
                   ),
                 ),
-                const SizedBox(height: 16),
-                Text(
-                  "Choose the service you need assistance with",
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.grey[600],
-                  ),
-                  textAlign: TextAlign.center,
-                ),
                 const SizedBox(height: 28),
-
                 Wrap(
                   spacing: spacing,
                   runSpacing: spacing,
                   children: [
                     categoryCard(
                       icon: Icons.description,
-                      title: "Birth Certificate",
-                      subtitle: "Apply for birth registration certificate",
+                      title: appState.isBangla ? "জন্ম নিবন্ধন" : "Birth Certificate",
+                      subtitle: appState.isBangla
+                          ? "জন্ম নিবন্ধন সনদ"
+                          : "Apply for birth registration",
                       cardWidth: cardWidth,
+                      isDarkMode: appState.isDarkMode,
                     ),
                     categoryCard(
                       icon: Icons.credit_card,
-                      title: "National ID Card",
-                      subtitle: "NID application and services",
+                      title: appState.isBangla ? "জাতীয় পরিচয়পত্র" : "National ID Card",
+                      subtitle: appState.isBangla ? "এনআইডি সেবা" : "NID application & services",
                       cardWidth: cardWidth,
+                      isDarkMode: appState.isDarkMode,
                     ),
                     categoryCard(
                       icon: Icons.flight,
-                      title: "Passport",
-                      subtitle: "Passport application & renewal",
+                      title: appState.isBangla ? "পাসপোর্ট" : "Passport",
+                      subtitle: appState.isBangla ? "পাসপোর্ট আবেদন" : "Passport application & renewal",
                       cardWidth: cardWidth,
+                      isDarkMode: appState.isDarkMode,
                     ),
                     categoryCard(
                       icon: Icons.school,
-                      title: "HSC / SSC Certificate",
-                      subtitle: "Educational certificate verification",
+                      title: appState.isBangla ? "এসএসসি / এইচএসসি" : "HSC / SSC Certificate",
+                      subtitle: appState.isBangla ? "শিক্ষা সনদ যাচাই" : "Educational certificate verification",
                       cardWidth: cardWidth,
+                      isDarkMode: appState.isDarkMode,
                     ),
                   ],
                 ),
@@ -178,3 +214,4 @@ class _DarkMoodState extends State<DarkMood> {
     );
   }
 }
+
