@@ -1,5 +1,5 @@
-
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'appstate.dart';
 
@@ -17,53 +17,62 @@ class SettingsBottomSheet {
             return Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: appState.isDarkMode
-                    ? Colors.grey[900]
-                    : Colors.white,
-                borderRadius:
-                const BorderRadius.vertical(top: Radius.circular(20)),
+                color: appState.isDarkMode ? Colors.grey[900] : Colors.white,
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  // Dark Mode Switch
                   SwitchListTile(
                     contentPadding: EdgeInsets.zero,
                     title: Text(
                       appState.isBangla ? "ডার্ক মোড" : "Dark Mode",
-                      style: TextStyle(
+                      style: appState.isBangla
+                          ? GoogleFonts.hindSiliguri(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
-                        color: appState.isDarkMode
-                            ? Colors.white
-                            : Colors.black,
+                        color: appState.isDarkMode ? Colors.white : Colors.black,
+                      )
+                          : GoogleFonts.roboto(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: appState.isDarkMode ? Colors.white : Colors.black,
                       ),
                     ),
                     value: appState.isDarkMode,
                     onChanged: (value) {
                       appState.setDarkMode(value);
                     },
+                    activeColor: Colors.green,
+                    activeTrackColor: Colors.green[200],
                   ),
 
                   const SizedBox(height: 8),
 
+                  // Language Switch
                   SwitchListTile(
                     contentPadding: EdgeInsets.zero,
                     title: Text(
-                      appState.isBangla
-                          ? "বাংলা / English"
-                          : "Bangla / English",
-                      style: TextStyle(
+                      appState.isBangla ? "বাংলা / English" : "Bangla / English",
+                      style: appState.isBangla
+                          ? GoogleFonts.hindSiliguri(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
-                        color: appState.isDarkMode
-                            ? Colors.white
-                            : Colors.black,
+                        color: appState.isDarkMode ? Colors.white : Colors.black,
+                      )
+                          : GoogleFonts.roboto(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: appState.isDarkMode ? Colors.white : Colors.black,
                       ),
                     ),
                     value: appState.isBangla,
                     onChanged: (value) {
                       appState.setLanguage(value);
                     },
+                    activeColor: Colors.green,
+                    activeTrackColor: Colors.green[200],
                   ),
                 ],
               ),

@@ -1,4 +1,6 @@
+
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'appstate.dart';
 import 'settings.dart';
@@ -11,15 +13,14 @@ class AppDrawer extends StatelessWidget {
     return Consumer<AppState>(
       builder: (context, appState, _) {
         return Drawer(
-          backgroundColor:
-          appState.isDarkMode ? Colors.grey[900] : Colors.white,
+          backgroundColor: appState.isDarkMode ? Colors.grey[900] : Colors.white,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.end,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 20),
 
-              _drawerItem(
+              drawerItem(
                 icon: Icons.bar_chart,
                 title: appState.isBangla ? "প্রগেস" : "Progress",
                 context: context,
@@ -29,7 +30,7 @@ class AppDrawer extends StatelessWidget {
 
               const SizedBox(height: 12),
 
-              _drawerItem(
+              drawerItem(
                 icon: Icons.report_problem,
                 title: appState.isBangla ? "অভিযোগ" : "Complain",
                 context: context,
@@ -39,12 +40,12 @@ class AppDrawer extends StatelessWidget {
 
               const SizedBox(height: 12),
 
-              _drawerItem(
+              drawerItem(
                 icon: Icons.settings,
                 title: appState.isBangla ? "সেটিংস" : "Settings",
                 context: context,
                 onTap: () {
-                  Navigator.pop(context); // drawer close
+                  Navigator.pop(context);
                   SettingsBottomSheet.show(context);
                 },
                 appState: appState,
@@ -57,34 +58,43 @@ class AppDrawer extends StatelessWidget {
       },
     );
   }
+}
 
-  Widget _drawerItem({
-    required IconData icon,
-    required String title,
-    required BuildContext context,
-    required VoidCallback onTap,
-    required AppState appState,
-  }) {
-    return InkWell(
-      onTap: onTap,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-        child: Row(
-          children: [
-            Icon(icon, color: Colors.green, size: 26),
-            const SizedBox(width: 12),
-            Text(
-              title,
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                color:
-                appState.isDarkMode ? Colors.white : Colors.black,
-              ),
-            ),
-          ],
-        ),
+
+Widget drawerItem({
+  required IconData icon,
+  required String title,
+  required BuildContext context,
+  required VoidCallback onTap,
+  required AppState appState,
+}) {
+
+  final TextStyle textStyle = appState.isBangla
+      ? GoogleFonts.hindSiliguri(
+    fontSize: 16,
+    fontWeight: FontWeight.w600,
+    color: appState.isDarkMode ? Colors.white : Colors.black,
+  )
+      : GoogleFonts.roboto(
+    fontSize: 16,
+    fontWeight: FontWeight.w600,
+    color: appState.isDarkMode ? Colors.white : Colors.black,
+  );
+
+  return InkWell(
+    onTap: onTap,
+    child: Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      child: Row(
+        children: [
+          Icon(icon, color: Colors.green[900], size: 26),
+          const SizedBox(width: 12),
+          Text(
+            title,
+            style: textStyle,
+          ),
+        ],
       ),
-    );
-  }
+    ),
+  );
 }
