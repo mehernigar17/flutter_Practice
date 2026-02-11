@@ -1,78 +1,90 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'appstate.dart';
+import 'settings.dart';
 
 class AppDrawer extends StatelessWidget {
-  final AppState appState;
-
-  const AppDrawer({super.key, required this.appState});
+  const AppDrawer({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Drawer(
-      backgroundColor: Colors.white,
-      child: Column(
-        children: [
-          const SizedBox(height: 60),
-          _drawerItem(
-            Icons.bar_chart,
-            appState.isBangla ? "প্রগেস" : "Progress",
-                () {},
-          ),
-          _drawerItem(
-            Icons.report_problem,
-            appState.isBangla ? "অভিযোগ" : "Complain",
-                () {},
-          ),
-          const Divider(),
-          _drawerItem(
-            Icons.settings,
-            appState.isBangla ? "সেটিংস" : "Settings",
-                () {
-              Navigator.pop(context);
-              _openSettings(context);
-            },
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _drawerItem(
-      IconData icon, String title, VoidCallback onTap) {
-    return ListTile(
-      leading: Icon(icon, color: Colors.green),
-      title: Text(title, style: const TextStyle(fontSize: 16)),
-      onTap: onTap,
-    );
-  }
-
-  void _openSettings(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (_) {
-        return Padding(
-          padding: const EdgeInsets.all(16),
+    return Consumer<AppState>(
+      builder: (context, appState, _) {
+        return Drawer(
+          backgroundColor:
+          appState.isDarkMode ? Colors.grey[900] : Colors.white,
           child: Column(
-            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SwitchListTile(
-                title:
-                Text(appState.isBangla ? "ডার্ক মোড" : "Dark Mode"),
-                value: appState.isDarkMode,
-                onChanged: appState.setDarkMode,
+              const SizedBox(height: 20),
+
+              _drawerItem(
+                icon: Icons.bar_chart,
+                title: appState.isBangla ? "প্রগেস" : "Progress",
+                context: context,
+                onTap: () {},
+                appState: appState,
               ),
-              SwitchListTile(
-                title: const Text("বাংলা / English"),
-                value: appState.isBangla,
-                onChanged: appState.setLanguage,
+
+              const SizedBox(height: 12),
+
+              _drawerItem(
+                icon: Icons.report_problem,
+                title: appState.isBangla ? "অভিযোগ" : "Complain",
+                context: context,
+                onTap: () {},
+                appState: appState,
               ),
+
+              const SizedBox(height: 12),
+
+              _drawerItem(
+                icon: Icons.settings,
+                title: appState.isBangla ? "সেটিংস" : "Settings",
+                context: context,
+                onTap: () {
+                  Navigator.pop(context); // drawer close
+                  SettingsBottomSheet.show(context);
+                },
+                appState: appState,
+              ),
+
+              const SizedBox(height: 20),
             ],
           ),
         );
       },
+    );
+  }
+
+  Widget _drawerItem({
+    required IconData icon,
+    required String title,
+    required BuildContext context,
+    required VoidCallback onTap,
+    required AppState appState,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+        child: Row(
+          children: [
+            Icon(icon, color: Colors.green, size: 26),
+            const SizedBox(width: 12),
+            Text(
+              title,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color:
+                appState.isDarkMode ? Colors.white : Colors.black,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

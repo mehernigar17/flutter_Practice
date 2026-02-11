@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+
 import 'appstate.dart';
 import 'appdrawer.dart';
+import 'birthpage.dart';
+import 'nidpage.dart';
+import 'passport.dart';
+import 'educationpage.dart';
 
 class DarkMood extends StatelessWidget {
   const DarkMood({super.key});
@@ -13,6 +18,7 @@ class DarkMood extends StatelessWidget {
     required String subtitle,
     required double cardWidth,
     required bool isDarkMode,
+    required VoidCallback onArrowTap,
   }) {
     return SizedBox(
       width: cardWidth,
@@ -33,14 +39,32 @@ class DarkMood extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: Colors.green,
-                borderRadius: BorderRadius.circular(14),
-              ),
-              child: Icon(icon, color: Colors.white, size: 26),
+            /// ICON + ARROW ROW
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Colors.green,
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                  child: Icon(icon, color: Colors.white, size: 26),
+                ),
+
+                /// 👉 CLICKABLE ARROW
+                InkWell(
+                  onTap: onArrowTap,
+                  borderRadius: BorderRadius.circular(20),
+                  child: const Icon(
+                    Icons.arrow_forward_ios,
+                    color: Colors.white,
+                    size: 18,
+                  ),
+                ),
+              ],
             ),
+
             const SizedBox(height: 12),
             Text(
               title,
@@ -53,7 +77,10 @@ class DarkMood extends StatelessWidget {
             const SizedBox(height: 6),
             Text(
               subtitle,
-              style: TextStyle(fontSize: 13, color: Colors.grey[300]),
+              style: TextStyle(
+                fontSize: 13,
+                color: Colors.grey[300],
+              ),
             ),
           ],
         ),
@@ -71,7 +98,9 @@ class DarkMood extends StatelessWidget {
     screenWidth < 400 ? screenWidth - 32 : screenWidth / 2 - 24;
 
     return Scaffold(
-      drawer: AppDrawer(appState: appState),
+      //drawer: AppDrawer(appState: appState),
+      drawer: const AppDrawer(),
+
       backgroundColor:
       appState.isDarkMode ? Colors.black : const Color(0xffeefaf6),
       appBar: AppBar(
@@ -114,6 +143,14 @@ class DarkMood extends StatelessWidget {
                           : "Apply for birth registration",
                       cardWidth: cardWidth,
                       isDarkMode: appState.isDarkMode,
+                      onArrowTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const BirthPage(),
+                          ),
+                        );
+                      },
                     ),
                     categoryCard(
                       icon: Icons.credit_card,
@@ -125,6 +162,14 @@ class DarkMood extends StatelessWidget {
                           : "NID application & services",
                       cardWidth: cardWidth,
                       isDarkMode: appState.isDarkMode,
+                      onArrowTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const NidPage(),
+                          ),
+                        );
+                      },
                     ),
                     categoryCard(
                       icon: Icons.flight,
@@ -135,6 +180,14 @@ class DarkMood extends StatelessWidget {
                           : "Passport application & renewal",
                       cardWidth: cardWidth,
                       isDarkMode: appState.isDarkMode,
+                      onArrowTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const PassportPage(),
+                          ),
+                        );
+                      },
                     ),
                     categoryCard(
                       icon: Icons.school,
@@ -146,6 +199,14 @@ class DarkMood extends StatelessWidget {
                           : "Educational certificate verification",
                       cardWidth: cardWidth,
                       isDarkMode: appState.isDarkMode,
+                      onArrowTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const EducationPage(),
+                          ),
+                        );
+                      },
                     ),
                   ],
                 ),

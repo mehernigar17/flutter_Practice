@@ -18,13 +18,37 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<AppState>(
-      builder: (context, appState, child) {
+      builder: (context, appState, _) {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
+
+
+          themeMode:
+          appState.isDarkMode ? ThemeMode.dark : ThemeMode.light,
+
           theme: ThemeData(
-            brightness: appState.isDarkMode ? Brightness.dark : Brightness.light,
+            brightness: Brightness.light,
             primarySwatch: Colors.green,
+            scaffoldBackgroundColor: Colors.white,
+            canvasColor: Colors.white,
+            bottomSheetTheme: const BottomSheetThemeData(
+              backgroundColor: Colors.white,
+            ),
           ),
+
+          darkTheme: ThemeData(
+            brightness: Brightness.dark,
+            scaffoldBackgroundColor: Colors.grey[900],
+            canvasColor: Colors.grey[900],
+            bottomSheetTheme: const BottomSheetThemeData(
+              backgroundColor: Colors.grey,
+            ),
+            listTileTheme: const ListTileThemeData(
+              textColor: Colors.white,
+              iconColor: Colors.white,
+            ),
+          ),
+
           home: const DarkMood(),
         );
       },
